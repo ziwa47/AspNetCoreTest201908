@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace AspNetCoreTest201908.Api.Lab05_Service
+namespace AspNetCoreTest201908.Model
 {
     public interface IHttpService
     {

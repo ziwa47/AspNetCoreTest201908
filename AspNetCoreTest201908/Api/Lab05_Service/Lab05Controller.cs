@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreTest201908.Api.Lab05_Service
@@ -17,20 +18,8 @@ namespace AspNetCoreTest201908.Api.Lab05_Service
         [HttpGet]
         public async Task<IActionResult> Index1()
         {
-            string result;
-            if (await _httpService.IsAuthAsync())
-            {
-                result = "IsAuth";
-            }
-            else
-            {
-                result = "IsNotAuth";
-            }
-
-            return Ok(new
-            {
-                IsAuth = result
-            });
+            var result = await _httpService.IsAuthAsync();
+            return Ok(new AuthResult { IsAuth = result });
         }
     }
 }

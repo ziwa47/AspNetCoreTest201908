@@ -26,15 +26,16 @@ namespace AspNetCoreTest201908.Api.Lab04_DbContext
         [HttpPost]
         public async Task<IActionResult> Index2([FromBody] ProfileDto profileDto)
         {
-            _dbContext.Profile.Add(new Profile
+            var profile = new Profile
             {
                 Id = Guid.NewGuid(),
                 Name = profileDto.Name
-            });
+            };
+            _dbContext.Profile.Add(profile);
 
             await _dbContext.SaveChangesAsync();
             
-            return Ok();
+            return Ok(profile);
         }
     }
 

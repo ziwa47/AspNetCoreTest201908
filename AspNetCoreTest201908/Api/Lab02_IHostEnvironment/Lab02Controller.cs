@@ -1,3 +1,4 @@
+using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +19,10 @@ namespace AspNetCoreTest201908.Api.Lab02_IHostEnvironment
         {
             if (_environment.IsProduction())
             {
-                return Ok(new { Env = "Dev" });
+                return Ok(new EnvResult { Env = "Dev" });
             }
 
-            return Ok(new { Env = "Prod" });
+            return Ok(new EnvResult { Env = "Prod" });
         }
     }
 }

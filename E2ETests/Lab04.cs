@@ -1,6 +1,6 @@
 namespace E2ETests
 {
-    public interface Lab04
+    public class Lab04
     {
         
     }

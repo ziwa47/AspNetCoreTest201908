@@ -1,6 +1,5 @@
-﻿using AspNetCoreTest201908.Api.Lab01_IConfiguration;
-using AspNetCoreTest201908.Api.Lab05_Service;
-using AspNetCoreTest201908.Entity;
+﻿using AspNetCoreTest201908.Entity;
+using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

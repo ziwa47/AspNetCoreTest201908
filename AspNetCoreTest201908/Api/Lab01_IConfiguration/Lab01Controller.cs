@@ -1,3 +1,4 @@
+using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -20,24 +21,19 @@ namespace AspNetCoreTest201908.Api.Lab01_IConfiguration
         public IActionResult Index1()
         {
             var host = _configuration["Server:Host"];
-            return Ok(new { Host = host });
+            return Ok(new ServerResult { Host = host });
         }
-        
+
         public IActionResult Index2()
         {
             var host = _configuration.GetValue<string>("Server:Host");
-            return Ok(new { Host = host });
+            return Ok(new ServerResult { Host = host });
         }
-        
+
         public IActionResult Index3()
         {
             var host = _serverHost.Host;
-            return Ok(new { Host = host });
+            return Ok(new ServerResult { Host = host });
         }
-    }
-
-    public class ServerHost
-    {
-        public string Host { get; set; }
     }
 }

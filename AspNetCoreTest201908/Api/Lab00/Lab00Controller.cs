@@ -1,3 +1,4 @@
+using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreTest201908.Api.Lab00
@@ -8,7 +9,7 @@ namespace AspNetCoreTest201908.Api.Lab00
     {
         public IActionResult Index()
         {
-            return Ok(new { IsSuccess = true });
+            return Ok(new AuthResult { IsAuth = true });
         }
     }
 }

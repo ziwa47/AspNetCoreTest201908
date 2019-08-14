@@ -1,5 +1,5 @@
-using System.Linq;
 using System.Security.Claims;
+using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,10 +20,10 @@ namespace AspNetCoreTest201908.Api.Lab03_HttpContext
         {
             if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                return Ok(new { IsAuth = true });
+                return Ok(new AuthResult { IsAuth = true });
             }
 
-            return Unauthorized();
+            return Ok(new AuthResult { IsAuth = false });
         }
 
         public IActionResult Index2()
@@ -31,7 +31,7 @@ namespace AspNetCoreTest201908.Api.Lab03_HttpContext
             var email = GetClaim(ClaimTypes.Email);
             var myType = GetClaim("MyType");
 
-            return Ok(new
+            return Ok(new AuthClaim
             {
                 Email = email,
                 MyType = myType
@@ -41,19 +41,18 @@ namespace AspNetCoreTest201908.Api.Lab03_HttpContext
         public IActionResult Index3()
         {
             var user = _httpContextAccessor.HttpContext.Session.GetString("user");
-            return Ok(new { User = user });
+            return Ok(new AuthUser { User = user });
         }
 
         public IActionResult Index4()
         {
             var user = _httpContextAccessor.HttpContext.Request.Cookies["user"];
-            return Ok(new { User = user });
+            return Ok(new AuthUser { User = user });
         }
 
         private string GetClaim(string type)
         {
-            // return _httpContextAccessor.HttpContext.User.FindFirstValue(type);
-            return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(a => a.Type == type)?.Value;
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(type);
         }
     }
 }

@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace AspNetCoreTest201908.Api.Lab05_Service
+namespace AspNetCoreTest201908.Model
 {
     public class HttpService : IHttpService
     {
