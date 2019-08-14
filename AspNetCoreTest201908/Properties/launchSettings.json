@@ -1,0 +1,12 @@
+﻿{
+  "profiles": {
+    "AspNetCoreTest201908": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:8371",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
