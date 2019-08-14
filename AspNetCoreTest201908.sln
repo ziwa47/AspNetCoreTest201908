@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreTest201908", "AspNetCoreTest201908\AspNetCoreTest201908.csproj", "{C2B49DCB-D3BB-4A87-97FC-F475ECF95BFB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{9EBC481E-2858-4B4C-8D76-7F8137623571}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E2ETests", "E2ETests\E2ETests.csproj", "{F0AFB8CD-28EA-429B-B512-840FB48E5D43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{C2B49DCB-D3BB-4A87-97FC-F475ECF95BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2B49DCB-D3BB-4A87-97FC-F475ECF95BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2B49DCB-D3BB-4A87-97FC-F475ECF95BFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EBC481E-2858-4B4C-8D76-7F8137623571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EBC481E-2858-4B4C-8D76-7F8137623571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EBC481E-2858-4B4C-8D76-7F8137623571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EBC481E-2858-4B4C-8D76-7F8137623571}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0AFB8CD-28EA-429B-B512-840FB48E5D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0AFB8CD-28EA-429B-B512-840FB48E5D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0AFB8CD-28EA-429B-B512-840FB48E5D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0AFB8CD-28EA-429B-B512-840FB48E5D43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
