@@ -3,6 +3,7 @@
     "AspNetCoreTest201908": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl" : "http://localhost:8371/api/lab00/index",
       "applicationUrl": "http://localhost:8371",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
