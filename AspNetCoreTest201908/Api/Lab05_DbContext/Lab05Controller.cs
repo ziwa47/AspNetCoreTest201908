@@ -4,15 +4,15 @@ using AspNetCoreTest201908.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspNetCoreTest201908.Api.Lab04_DbContext
+namespace AspNetCoreTest201908.Api.Lab05_DbContext
 {
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
-    public class Lab04Controller : Controller
+    public class Lab05Controller : Controller
     {
         private readonly AppDbContext _dbContext;
 
-        public Lab04Controller(AppDbContext dbContext)
+        public Lab05Controller(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

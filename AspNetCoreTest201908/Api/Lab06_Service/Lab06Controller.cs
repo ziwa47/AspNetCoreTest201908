@@ -2,15 +2,15 @@ using System.Threading.Tasks;
 using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AspNetCoreTest201908.Api.Lab05_Service
+namespace AspNetCoreTest201908.Api.Lab06_Service
 {
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
-    public class Lab05Controller : Controller
+    public class Lab06Controller : Controller
     {
         private readonly IHttpService _httpService;
 
-        public Lab05Controller(IHttpService httpService)
+        public Lab06Controller(IHttpService httpService)
         {
             _httpService = httpService;
         }

@@ -3,15 +3,15 @@ using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AspNetCoreTest201908.Api.Lab03_HttpContext
+namespace AspNetCoreTest201908.Api.Lab04_HttpContext
 {
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
-    public class Lab03Controller : Controller
+    public class Lab04Controller : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public Lab03Controller(IHttpContextAccessor httpContextAccessor)
+        public Lab04Controller(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }

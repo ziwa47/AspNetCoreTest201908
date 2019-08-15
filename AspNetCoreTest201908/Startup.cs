@@ -20,22 +20,25 @@ namespace AspNetCoreTest201908
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //Lab04
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            //Lab05
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseInMemoryDatabase("InMemory");
             });
-                    
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             //Lab01
+            services.AddLogging();
+
+            //Lab02
             services.Configure<ServerHost>(Configuration.GetSection("Server"));
 
-            //Lab03
+            //Lab04
             services.AddHttpContextAccessor();
             services.AddSession();
             
-            //Lab05
+            //Lab06
             services.AddScoped<IHttpService, HttpService>();
             services.AddHttpClient();
         }
@@ -44,7 +47,7 @@ namespace AspNetCoreTest201908
         {
             app.UseStaticFiles();
 
-            //Lab03
+            //Lab04
             app.UseSession();
             
             app.UseMvc();

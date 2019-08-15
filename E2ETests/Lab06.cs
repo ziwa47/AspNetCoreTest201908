@@ -1,6 +1,6 @@
 namespace E2ETests
 {
-    public class Lab04
+    public class Lab06
     {
         
     }

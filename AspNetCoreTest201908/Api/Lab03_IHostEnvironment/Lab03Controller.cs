@@ -2,15 +2,15 @@ using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AspNetCoreTest201908.Api.Lab02_IHostEnvironment
+namespace AspNetCoreTest201908.Api.Lab03_IHostEnvironment
 {
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
-    public class Lab02Controller : Controller
+    public class Lab03Controller : Controller
     {
         private readonly IHostingEnvironment _environment;
 
-        public Lab02Controller(IHostingEnvironment environment)
+        public Lab03Controller(IHostingEnvironment environment)
         {
             _environment = environment;
         }

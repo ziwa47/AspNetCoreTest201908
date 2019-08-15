@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace AspNetCoreTest201908.Api.Lab01_IConfiguration
+namespace AspNetCoreTest201908.Api.Lab02_IConfiguration
 {
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
-    public class Lab01Controller : Controller
+    public class Lab02Controller : Controller
     {
         private readonly IConfiguration _configuration;
         private readonly ServerHost _serverHost;
 
-        public Lab01Controller(IConfiguration configuration, IOptions<ServerHost> options)
+        public Lab02Controller(IConfiguration configuration, IOptions<ServerHost> options)
         {
             _configuration = configuration;
             _serverHost = options.Value;
