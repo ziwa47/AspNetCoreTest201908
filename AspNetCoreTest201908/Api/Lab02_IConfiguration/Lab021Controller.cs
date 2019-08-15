@@ -1,21 +1,18 @@
 using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace AspNetCoreTest201908.Api.Lab02_IConfiguration
 {
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
-    public class Lab02Controller : Controller
+    public class Lab021Controller : Controller
     {
         private readonly IConfiguration _configuration;
-        private readonly ServerHost _serverHost;
 
-        public Lab02Controller(IConfiguration configuration, IOptions<ServerHost> options)
+        public Lab021Controller(IConfiguration configuration)
         {
             _configuration = configuration;
-            _serverHost = options.Value;
         }
 
         public IActionResult Index1()
@@ -27,12 +24,6 @@ namespace AspNetCoreTest201908.Api.Lab02_IConfiguration
         public IActionResult Index2()
         {
             var host = _configuration.GetValue<string>("Server:Host");
-            return Ok(new ServerResult { Host = host });
-        }
-
-        public IActionResult Index3()
-        {
-            var host = _serverHost.Host;
             return Ok(new ServerResult { Host = host });
         }
     }
