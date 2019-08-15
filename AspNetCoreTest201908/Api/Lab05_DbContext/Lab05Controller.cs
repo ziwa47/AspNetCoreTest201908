@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AspNetCoreTest201908.Entity;
+using AspNetCoreTest201908.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,10 +38,5 @@ namespace AspNetCoreTest201908.Api.Lab05_DbContext
             
             return Ok(profile);
         }
-    }
-
-    public class ProfileDto
-    {
-        public string Name { get; set; }
     }
 }
