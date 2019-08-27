@@ -27,7 +27,8 @@ namespace E2ETests
                 {
                     configureServices.AddDbContext<AppDbContext>(options =>
                     {
-                        options.UseInMemoryDatabase("memory");
+                        options.UseSqlite("DataSource=name");
+                        //options.UseInMemoryDatabase("memory");
                     });
                 });
             });
