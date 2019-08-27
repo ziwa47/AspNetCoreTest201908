@@ -11,7 +11,7 @@ namespace E2ETests
     public class TestBase : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly WebApplicationFactory<Startup> _factory;
-        protected HttpClient appWebHost;
+        protected WebApplicationFactory<Startup> AppWebHost;
 
         protected TestBase(WebApplicationFactory<Startup> factory)
         {
@@ -20,7 +20,7 @@ namespace E2ETests
 
         protected HttpClient CreateHttpClient()
         {
-            appWebHost = _factory.WithWebHostBuilder(builder =>
+            AppWebHost = _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(configureServices =>
                 {
@@ -29,8 +29,8 @@ namespace E2ETests
                         options.UseInMemoryDatabase("memory");
                     });
                 });
-            }).CreateClient();
-            return appWebHost;
+            });
+            return AppWebHost.CreateClient();
 
             //return _factory.CreateClient();
         }
