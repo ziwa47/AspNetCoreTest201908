@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AspNetCoreTest201908;
@@ -8,6 +9,7 @@ using AspNetCoreTest201908.Model;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace E2ETests
@@ -42,6 +44,35 @@ namespace E2ETests
             var result = httpResponseMessage.Content.ReadAsAsync<List<Profile>>();
             result.Result.Count.Should().NotBe(0);
             result.Result.Should().BeEquivalentTo(profile);
+        }
+        [Fact]
+        public async Task Test02()
+        {
+            var httpClient = CreateHttpClient();
+
+            var profile = new Profile()
+            {
+                Id = Guid.NewGuid(),
+                Name = "123"
+            };
+
+            DbOperator(appDbContext =>
+            {
+                appDbContext.Profile.AddRange(profile);
+                appDbContext.SaveChanges();
+            });
+
+            var httpResponseMessage = await httpClient.PostAsJsonAsync("api/Lab05/Index2",profile);
+            var result = httpResponseMessage.Content.ReadAsAsync<Profile>();
+
+            DbOperator(appDbContext =>
+            {
+                var dbProfile = appDbContext.Profile.First();
+                dbProfile.Id.Should().NotBeEmpty();
+                dbProfile.Name.Should().Be("123");
+            });
+
+            result.Result.Name.Should().Be("123");
         }
     }
 }
