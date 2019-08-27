@@ -50,20 +50,13 @@ namespace E2ETests
         {
             var httpClient = CreateHttpClient();
 
-            var profile = new Profile()
+            var profile = new ProfileDto()
             {
-                Id = Guid.NewGuid(),
                 Name = "123"
             };
 
-            DbOperator(appDbContext =>
-            {
-                appDbContext.Profile.AddRange(profile);
-                appDbContext.SaveChanges();
-            });
-
-            var httpResponseMessage = await httpClient.PostAsJsonAsync("api/Lab05/Index2",profile);
-            var result = httpResponseMessage.Content.ReadAsAsync<Profile>();
+            var httpResponseMessage = await httpClient.PostAsJsonAsync("api/Lab05/Index2", profile);
+            var result = httpResponseMessage.Content.ReadAsAsync<ProfileDto>();
 
             DbOperator(appDbContext =>
             {
