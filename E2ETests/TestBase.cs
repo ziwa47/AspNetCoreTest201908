@@ -60,10 +60,14 @@ namespace E2ETests
 
         protected void DbOperator(Action<AppDbContext> action)
         {
+            Operator(action);
+        }
+        protected void Operator<T>(Action<T> action)
+        {
             using (var serviceScope = AppWebHost.Server.Host.Services.CreateScope())
             {
-                var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                action.Invoke(appDbContext);
+                var t = serviceScope.ServiceProvider.GetRequiredService<T>();
+                action.Invoke(t);
             }
         }
     }
