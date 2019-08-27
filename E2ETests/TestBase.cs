@@ -31,6 +31,8 @@ namespace E2ETests
                 if (servicesConfiguration != null)
                 {
                     builder.ConfigureTestServices(servicesConfiguration);
+                    // Use Autofac
+                    //builder.ConfigureTestContainer<ContainerBuilder>();
                 }
 
                 builder.ConfigureServices(configureServices =>

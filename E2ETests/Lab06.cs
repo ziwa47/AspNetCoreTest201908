@@ -43,22 +43,22 @@ namespace E2ETests
             });
 
         }
-        [Fact]
-        public async Task TestUnitTest()
-        {
-            var buildServiceProvider = new ServiceCollection()
-                .AddHttpClient()
-                .AddScoped<IHttpService, HttpService>()
-                .BuildServiceProvider();
-            using (var serviceScope = buildServiceProvider.CreateScope())
-            {
-                var httpService = serviceScope.ServiceProvider.GetRequiredService<IHttpService>();
-                var result = await httpService.IsAuthAsync();
-                result.Should().BeTrue();
-            }
+        //[Fact]
+        //public async Task TestUnitTest()
+        //{
+        //    var buildServiceProvider = new ServiceCollection()
+        //        .AddHttpClient()
+        //        .AddScoped<IHttpService, HttpService>()
+        //        .BuildServiceProvider();
+        //    using (var serviceScope = buildServiceProvider.CreateScope())
+        //    {
+        //        var httpService = serviceScope.ServiceProvider.GetRequiredService<IHttpService>();
+        //        var result = await httpService.IsAuthAsync();
+        //        result.Should().BeTrue();
+        //    }
 
             
-        }
+        //}
         [Fact]
         public async Task TestFail()
         {
