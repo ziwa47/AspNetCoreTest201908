@@ -30,20 +30,29 @@ namespace E2ETests
                         options.UseSqlite("DataSource=name");
                         //options.UseInMemoryDatabase("memory");
                     });
+
+                    var serviceProvider = configureServices.BuildServiceProvider();
+                    using (var serviceScope = serviceProvider.CreateScope())
+                    {
+                        var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                        appDbContext.Database.EnsureCreated();
+                    }
+
+
                 });
-            });
+        });
             return AppWebHost.CreateClient();
 
             //return _factory.CreateClient();
         }
 
-        protected void DbOperator(Action<AppDbContext> action)
+    protected void DbOperator(Action<AppDbContext> action)
+    {
+        using (var serviceScope = AppWebHost.Server.Host.Services.CreateScope())
         {
-            using (var serviceScope = AppWebHost.Server.Host.Services.CreateScope())
-            {
-                var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                action.Invoke(appDbContext);
-            }
+            var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+            action.Invoke(appDbContext);
         }
     }
+}
 }
