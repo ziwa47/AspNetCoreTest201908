@@ -24,4 +24,10 @@
       <ProjectReference Include="..\AspNetCoreTest201908\AspNetCoreTest201908.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="xunit.runner.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

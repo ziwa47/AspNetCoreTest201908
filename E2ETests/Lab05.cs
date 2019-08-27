@@ -67,5 +67,33 @@ namespace E2ETests
 
             result.Result.Name.Should().Be("123");
         }
+
+
+        [Fact]
+        public async Task Test03()
+        {
+            var httpClient = CreateHttpClient();
+
+            var profile = new List<Profile>()
+            {
+                new Profile()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "123"
+                }
+            };
+
+            DbOperator(appDbContext =>
+            {
+                appDbContext.Profile.AddRange(profile);
+                appDbContext.SaveChanges();
+            });
+
+            var httpResponseMessage = await httpClient.GetAsync("api/Lab05/Index3");
+            var result = httpResponseMessage.Content.ReadAsAsync<List<VProfile>>();
+            var expected = profile.Select(a => new VProfile() {Name = a.Name});
+            result.Result.Should().BeEquivalentTo(expected);
+        }
+
     }
 }
