@@ -1,19 +1,18 @@
-using AspNetCoreTest201908.Api.Lab04_HttpContext;
-using AspNetCoreTest201908.Model;
-
-using FluentAssertions;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.Mvc;
-
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using AspNetCoreTest201908.Api.Lab04_HttpContext;
+using AspNetCoreTest201908.Model;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
 using Xunit;
 
 namespace UnitTests
@@ -21,82 +20,117 @@ namespace UnitTests
     public class Lab04Tests
     {
         [Fact]
-        public void Test11()
+        public void Http01()
         {
-            var httpContextAccessor = new HttpContextAccessor();
-            httpContextAccessor.HttpContext = new DefaultHttpContext()
+            var genericIdentity = new GenericIdentity("Email");
+            IHttpContextAccessor httpContext = new HttpContextAccessor
             {
-                User = new ClaimsPrincipal(new GenericIdentity("User")),
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(genericIdentity)
+                }
             };
-            var lab04Controller = new Lab04Controller(httpContextAccessor);
+
+            var lab04Controller = new Lab04Controller(httpContext);
+
             var result = lab04Controller.Index1() as OkObjectResult;
+
             result.Value.As<AuthResult>().IsAuth.Should().BeTrue();
         }
 
         [Fact]
-        public void Test12()
+        public void Http02()
         {
-            var httpContextAccessor = new HttpContextAccessor();
-            httpContextAccessor.HttpContext = new DefaultHttpContext()
+            var enumerable = new Claim[]
             {
+                new Claim(ClaimTypes.Email, "cc@cc.cc"),
+                new Claim("MyType", "myType"),
             };
-            var lab04Controller = new Lab04Controller(httpContextAccessor);
-            var result = lab04Controller.Index1() as OkObjectResult;
-            result.Value.As<AuthResult>().IsAuth.Should().BeFalse();
-        }
-
-        [Fact]
-        public void Test21()
-        {
-            var claims = new List<Claim>()
+            var claimsIdentities = new ClaimsIdentity[]
             {
-                new Claim(ClaimTypes.Email,"abc@a.com"),
-                new Claim("MyType","myType"),
+                new ClaimsIdentity(enumerable)
             };
-
-            var httpContextAccessor = new HttpContextAccessor();
-            ClaimsIdentity identities = new ClaimsIdentity(claims);
-            httpContextAccessor.HttpContext = new DefaultHttpContext()
+            IHttpContextAccessor httpContext = new HttpContextAccessor
             {
-                User = new ClaimsPrincipal(identities),
-            };
-            var lab04Controller = new Lab04Controller(httpContextAccessor);
-            var result = lab04Controller.Index2() as OkObjectResult;
-            result.Value.As<AuthClaim>().Email.Should().Be("abc@a.com");
-            result.Value.As<AuthClaim>().MyType.Should().Be("myType");
-        }
-
-        [Fact]
-        public void Test3()
-        {
-            var testSession = new TestSession();
-
-            var httpContextAccessor = new HttpContextAccessor();
-            httpContextAccessor.HttpContext = new DefaultHttpContext()
-            {
-                Session = testSession,
-            };
-            var lab04Controller = new Lab04Controller(httpContextAccessor);
-            var result = lab04Controller.Index3() as OkObjectResult;
-            result.Value.As<AuthUser>().User.Should().Be("ziwa");
-        }
-
-        [Fact]
-        public void Test4()
-        {
-            var httpContextAccessor = new HttpContextAccessor();
-            httpContextAccessor.HttpContext = new DefaultHttpContext()
-            {
-                Request = { Cookies = new RequestCookieCollection(
-                    new Dictionary<string,string>
-                    {
-                        {"user","ziwa"},
-                    })
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(claimsIdentities)
                 }
             };
-            var lab04Controller = new Lab04Controller(httpContextAccessor);
+
+            var lab04Controller = new Lab04Controller(httpContext);
+
+            var result = lab04Controller.Index2() as OkObjectResult;
+
+            var authClaim = result.Value.As<AuthClaim>();
+            authClaim.Email.Should().Be("cc@cc.cc");
+            authClaim.MyType.Should().Be("myType");
+        }
+
+        [Fact]
+        public void Http03()
+        {
+            IHttpContextAccessor httpContext = new HttpContextAccessor
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    Session = new TestSession()
+                }
+            };
+
+            var lab04Controller = new Lab04Controller(httpContext);
+
+            var result = lab04Controller.Index3() as OkObjectResult;
+            result.Value.As<AuthUser>().User.Should().Be("cash");
+        }
+
+        [Fact]
+        public void Http03_2()
+        {
+            ISession session = Substitute.For<ISession>();
+
+            session.TryGetValue(Arg.Any<string>(), out Arg.Any<byte[]>())
+                   .Returns(a =>
+                   {
+                       a[1] = Encoding.UTF8.GetBytes("cash");
+                       return true;
+                   });
+            IHttpContextAccessor httpContext = new HttpContextAccessor
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    Session = session
+                }
+            };
+
+            var lab04Controller = new Lab04Controller(httpContext);
+
+            var result = lab04Controller.Index3() as OkObjectResult;
+            result.Value.As<AuthUser>().User.Should().Be("cash");
+        }
+
+        [Fact]
+        public void Http04()
+        {
+            var dictionary = new Dictionary<string, string>
+            {
+                { "user", "cash" }
+            };
+            IHttpContextAccessor httpContext = new HttpContextAccessor
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    Request =
+                    {
+                        Cookies = new RequestCookieCollection(dictionary)
+                    }
+                }
+            };
+
+            var lab04Controller = new Lab04Controller(httpContext);
+
             var result = lab04Controller.Index4() as OkObjectResult;
-            result.Value.As<AuthUser>().User.Should().Be("ziwa");
+            result.Value.As<AuthUser>().User.Should().Be("cash");
         }
     }
 
@@ -114,7 +148,7 @@ namespace UnitTests
 
         public bool TryGetValue(string key, out byte[] value)
         {
-            value = Encoding.UTF8.GetBytes("ziwa");
+            value = Encoding.UTF8.GetBytes("cash");
             return true;
         }
 

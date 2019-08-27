@@ -1,11 +1,9 @@
 using AspNetCoreTest201908.Api.Lab03_IHostEnvironment;
 using AspNetCoreTest201908.Model;
-
 using FluentAssertions;
-
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc;
-
 using Xunit;
 
 namespace UnitTests
@@ -13,23 +11,31 @@ namespace UnitTests
     public class Lab03Tests
     {
         [Fact]
-        public void Test()
+        public void Host1()
         {
-            var sut = new Lab03Controller(new HostingEnvironment(){
-                EnvironmentName = "Development"
-            });
-            var envResult = sut.Index1() as OkObjectResult;
-            envResult.Value.As<EnvResult>().Env.Should().Be("Prod");
-        }
-
-        [Fact]
-        public void Test2()
-        {
-            var lab01Controller = new Lab03Controller(new HostingEnvironment() {
+            IHostingEnvironment environment = new HostingEnvironment
+            {
                 EnvironmentName = "Production"
-            });
-            var envResult = lab01Controller.Index1() as OkObjectResult;
-            envResult.Value.As<EnvResult>().Env.Should().Be("Dev");
-        }
+            };
+            var lab03Controller = new Lab03Controller(environment);
+
+            var result = lab03Controller.Index1() as OkObjectResult;
+
+            result.Value.As<EnvResult>().Env.Should().Be("Dev");
+        }        
+        
+        [Fact]
+        public void Host2()
+        {
+            IHostingEnvironment environment = new HostingEnvironment
+            {
+                EnvironmentName = "Dev"
+            };
+            var lab03Controller = new Lab03Controller(environment);
+
+            var result = lab03Controller.Index1() as OkObjectResult;
+
+            result.Value.As<EnvResult>().Env.Should().Be("Prod");
+        }        
     }
 }

@@ -10,5 +10,19 @@ namespace AspNetCoreTest201908.Entity
         }
 
         public DbSet<Profile> Profile { get; set; }
+        public DbQuery<VProfile> VProfile { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Query<VProfile>().ToView(nameof(VProfile));
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+
+
+    public class VProfile
+    {
+        public string Name { get; set; }
     }
 }

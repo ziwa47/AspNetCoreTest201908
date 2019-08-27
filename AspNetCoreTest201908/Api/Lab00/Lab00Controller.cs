@@ -11,5 +11,9 @@ namespace AspNetCoreTest201908.Api.Lab00
         {
             return Ok(new AuthResult { IsAuth = true });
         }
+        public ActionResult<AuthResult> Index2()
+        {
+            return new AuthResult { IsAuth = true };
+        }
     }
 }

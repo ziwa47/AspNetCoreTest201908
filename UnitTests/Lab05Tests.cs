@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Security.Claims;
-using System.Security.Principal;
+using System.Linq;
 using System.Threading.Tasks;
-using AspNetCoreTest201908.Api.Lab04_HttpContext;
 using AspNetCoreTest201908.Api.Lab05_DbContext;
 using AspNetCoreTest201908.Entity;
 using AspNetCoreTest201908.Model;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -19,73 +15,120 @@ namespace UnitTests
     public class Lab05Tests
     {
         [Fact]
-        public async Task Test05()
+        public async Task Db01()
         {
-            var appDbContext = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options);
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                          .UseInMemoryDatabase("name01")
+                          .Options;
 
-            var expectations = new List<Profile>
+            AppDbContext appDbContext = new AppDbContext(options);
+
+            var expected = new List<Profile>
             {
-                new Profile(){Id = Guid.NewGuid(),Name = "ziwa"},
-                new Profile(){Id = Guid.NewGuid(),Name = "ziwa2"},
+                new Profile
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "cash"
+                }
             };
-            appDbContext.Profile.AddRange(expectations);
+            appDbContext.Profile.AddRange(expected);
             appDbContext.SaveChanges();
 
-            var lab04Controller = new Lab05Controller(appDbContext);
-            var result = await lab04Controller.Index1() as OkObjectResult;
+            var lab05Controller = new Lab05Controller(appDbContext);
 
-            result.Value.As<List<Profile>>()
-                .Should().BeEquivalentTo(expectations);
+            var result = (await lab05Controller.Index1()) as OkObjectResult;
+
+            result.Value.As<List<Profile>>().Should().BeEquivalentTo(expected);
         }
-        [Fact]
-        public async Task Test05_sqlite()
-        {
-            var dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
-                //.UseSqlite($"DataSource=:{Guid.NewGuid().ToString()}:")
-                //.UseSqlite($@"DataSource=C:\TESTDb\DXX.db")
-                .UseSqlite($@"DataSource=:memory:")
-                .Options;
 
-            var appDbContext = new AppDbContext(dbContextOptions);
+        [Fact]
+        public async Task Db02()
+        {
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                          .UseInMemoryDatabase("name02")
+                          .Options;
+
+            AppDbContext appDbContext = new AppDbContext(options);
+            var lab05Controller = new Lab05Controller(appDbContext);
+
+            var profileDto = new ProfileDto
+            {
+                Name = "cash"
+            };
+            var result = (await lab05Controller.Index2(profileDto)) as OkObjectResult;
+
+            var profile = result.Value.As<Profile>();
+            profile.Id.Should().NotBeEmpty();
+            profile.Name.Should().Be("cash");
+
+            var dbProfile = appDbContext.Profile.First();
+            dbProfile.Id.Should().NotBeEmpty();
+            dbProfile.Name.Should().Be("cash");
+        }
+
+        [Fact]
+        public async Task Db03()
+        {
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                          .UseSqlite("DataSource=:memory:")
+                          .Options;
+
+            AppDbContext appDbContext = new AppDbContext(options);
 
             appDbContext.Database.OpenConnection();
             appDbContext.Database.EnsureCreated();
 
-            var expectations = new List<Profile>
+            var expected = new List<Profile>
             {
-                new Profile(){Id = Guid.NewGuid(),Name = "ziwa"},
-                new Profile(){Id = Guid.NewGuid(),Name = "ziwa2"},
+                new Profile
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "cash"
+                }
             };
-            appDbContext.Profile.AddRange(expectations);
+            appDbContext.Profile.AddRange(expected);
             appDbContext.SaveChanges();
 
-            var lab04Controller = new Lab05Controller(appDbContext);
-            var result = await lab04Controller.Index1() as OkObjectResult;
+            var lab05Controller = new Lab05Controller(appDbContext);
 
-            result.Value.As<List<Profile>>()
-                .Should().BeEquivalentTo(expectations);
+            var result = (await lab05Controller.Index1()) as OkObjectResult;
 
-            appDbContext.Database.CloseConnection();
+            result.Value.As<List<Profile>>().Should().BeEquivalentTo(expected);
+
             appDbContext.Database.EnsureDeleted();
+            appDbContext.Database.CloseConnection();
         }
+
         [Fact]
-        public async Task Test052()
+        public async Task Db04()
         {
-            var appDbContext = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options);
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                          .UseSqlite("DataSource=:memory:")
+                          .Options;
 
-            var lab04Controller = new Lab05Controller(appDbContext);
-            var result = await lab04Controller.Index2(new ProfileDto()
+            AppDbContext appDbContext = new AppDbContext(options);
+
+            appDbContext.Database.OpenConnection();
+            appDbContext.Database.EnsureCreated();
+
+            var lab05Controller = new Lab05Controller(appDbContext);
+
+            var profileDto = new ProfileDto
             {
-                Name = "ziwa",
-            }) as OkObjectResult;
+                Name = "cash"
+            };
+            var result = (await lab05Controller.Index2(profileDto)) as OkObjectResult;
 
-            result.Value.As<Profile>().Id.Should().NotBeEmpty();
-            result.Value.As<Profile>().Name.Should().Be("ziwa");
+            var profile = result.Value.As<Profile>();
+            profile.Id.Should().NotBeEmpty();
+            profile.Name.Should().Be("cash");
+
+            var dbProfile = appDbContext.Profile.First();
+            dbProfile.Id.Should().NotBeEmpty();
+            dbProfile.Name.Should().Be("cash");
+
+            appDbContext.Database.EnsureDeleted();
+            appDbContext.Database.CloseConnection();
         }
-
     }
 }

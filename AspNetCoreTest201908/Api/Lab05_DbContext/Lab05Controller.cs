@@ -23,7 +23,7 @@ namespace AspNetCoreTest201908.Api.Lab05_DbContext
         {
             return Ok(await _dbContext.Profile.ToListAsync());
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Index2([FromBody] ProfileDto profileDto)
         {
@@ -35,8 +35,13 @@ namespace AspNetCoreTest201908.Api.Lab05_DbContext
             _dbContext.Profile.Add(profile);
 
             await _dbContext.SaveChangesAsync();
-            
+
             return Ok(profile);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Index3()
+        {
+            return Ok(await _dbContext.VProfile.ToListAsync());
         }
     }
 }
