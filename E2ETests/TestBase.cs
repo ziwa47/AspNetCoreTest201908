@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using AspNetCoreTest201908;
 using AspNetCoreTest201908.Entity;
@@ -33,6 +34,15 @@ namespace E2ETests
             return AppWebHost.CreateClient();
 
             //return _factory.CreateClient();
+        }
+
+        protected void DbOperator(Action<AppDbContext> action)
+        {
+            using (var serviceScope = AppWebHost.Server.Host.Services.CreateScope())
+            {
+                var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                action.Invoke(appDbContext);
+            }
         }
     }
 }

@@ -31,12 +31,12 @@ namespace E2ETests
                     Name = "123"
                 }
             };
-            using (var serviceScope = AppWebHost.Server.Host.Services.CreateScope())
+
+            DbOperator(appDbContext =>
             {
-                var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
                 appDbContext.Profile.AddRange(profile);
                 appDbContext.SaveChanges();
-            }
+            });
 
             var httpResponseMessage = await httpClient.GetAsync("api/Lab05/Index1");
             var result = httpResponseMessage.Content.ReadAsAsync<List<Profile>>();
