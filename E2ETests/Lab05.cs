@@ -23,7 +23,10 @@ namespace E2ETests
         [Fact]
         public async Task Test01()
         {
-            var httpClient = CreateHttpClient();
+            var httpClient = CreateHttpClient(service =>
+            {
+                service.AddScoped<IHttpService,Lab06.FakeHttpService>();
+            });
 
             var profile = new List<Profile>()
             {
@@ -48,7 +51,10 @@ namespace E2ETests
         [Fact]
         public async Task Test02()
         {
-            var httpClient = CreateHttpClient();
+            var httpClient = CreateHttpClient(service =>
+            {
+                service.AddScoped<IHttpService,Lab06.FakeHttpService>();
+            });
 
             var profile = new ProfileDto()
             {
@@ -72,7 +78,10 @@ namespace E2ETests
         [Fact]
         public async Task Test03()
         {
-            var httpClient = CreateHttpClient();
+            var httpClient = CreateHttpClient(service =>
+            {
+                service.AddScoped<IHttpService,Lab06.FakeHttpService>();
+            });
 
             var profile = new List<Profile>()
             {

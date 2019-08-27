@@ -2,7 +2,10 @@ using System;
 using System.Net.Http;
 using AspNetCoreTest201908;
 using AspNetCoreTest201908.Entity;
+using AspNetCoreTest201908.Model;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -19,10 +22,16 @@ namespace E2ETests
             _factory = factory;
         }
 
-        protected HttpClient CreateHttpClient()
+        protected HttpClient CreateHttpClient(Action<IServiceCollection> servicesConfiguration = null)
         {
             AppWebHost = _factory.WithWebHostBuilder(builder =>
             {
+
+                if (servicesConfiguration != null)
+                {
+                    builder.ConfigureTestServices(servicesConfiguration);
+                }
+
                 builder.ConfigureServices(configureServices =>
                 {
                     configureServices.AddDbContext<AppDbContext>(options =>
@@ -42,19 +51,19 @@ namespace E2ETests
 
                     }
                 });
-        });
+            });
             return AppWebHost.CreateClient();
 
             //return _factory.CreateClient();
         }
 
-    protected void DbOperator(Action<AppDbContext> action)
-    {
-        using (var serviceScope = AppWebHost.Server.Host.Services.CreateScope())
+        protected void DbOperator(Action<AppDbContext> action)
         {
-            var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-            action.Invoke(appDbContext);
+            using (var serviceScope = AppWebHost.Server.Host.Services.CreateScope())
+            {
+                var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                action.Invoke(appDbContext);
+            }
         }
     }
-}
 }

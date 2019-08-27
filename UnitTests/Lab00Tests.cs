@@ -6,7 +6,7 @@ using Xunit;
 
 namespace UnitTests
 {
-    public class Lab00Tests
+    public class Lab00Tests 
     {
         [Fact]
         public void Test()
