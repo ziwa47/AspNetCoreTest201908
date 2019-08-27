@@ -26,6 +26,7 @@ namespace E2ETests
         {
             AppWebHost = _factory.WithWebHostBuilder(builder =>
             {
+                builder.UseEnvironment("Test");
 
                 if (servicesConfiguration != null)
                 {
