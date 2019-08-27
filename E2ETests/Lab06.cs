@@ -47,6 +47,7 @@ namespace E2ETests
         public async Task TestUnitTest()
         {
             var buildServiceProvider = new ServiceCollection()
+                .AddHttpClient()
                 .AddScoped<IHttpService, HttpService>()
                 .BuildServiceProvider();
             using (var serviceScope = buildServiceProvider.CreateScope())
