@@ -23,18 +23,47 @@ namespace E2ETests
         {
             var httpClient = CreateHttpClient(service =>
             {
-                service.AddScoped<IHttpService,FakeHttpService>();
+                service.AddScoped<IHttpService, FakeHttpService>();
             });
             var httpResponseMessage = await httpClient.GetAsync("api/Lab06/Index1");
 
             var result = httpResponseMessage.Content.ReadAsAsync<AuthResult>();
-            result.Result.IsAuth.Should().BeTrue();        }
+            result.Result.IsAuth.Should().BeTrue();
+
+        }
+        [Fact]
+        public async Task Test01()
+        {
+            CreateHttpClient();
+
+            Operator<IHttpService>(async httpService =>
+            {
+                var result = await httpService.IsAuthAsync();
+                result.Should().BeTrue();
+            });
+
+        }
+        [Fact]
+        public async Task TestUnitTest()
+        {
+            var buildServiceProvider = new ServiceCollection()
+                .AddScoped<IHttpService, HttpService>()
+                .BuildServiceProvider();
+            using (var serviceScope = buildServiceProvider.CreateScope())
+            {
+                var httpService = serviceScope.ServiceProvider.GetRequiredService<IHttpService>();
+                var result = await httpService.IsAuthAsync();
+                result.Should().BeTrue();
+            }
+
+            
+        }
         [Fact]
         public async Task TestFail()
         {
             var httpClient = CreateHttpClient(service =>
             {
-                service.AddScoped<IHttpService,FakeFailHttpService>();
+                service.AddScoped<IHttpService, FakeFailHttpService>();
             });
             var httpResponseMessage = await httpClient.GetAsync("api/Lab06/Index1");
 
