@@ -15,5 +15,12 @@ namespace UnitTests
             var result = lab00Controller.Index() as OkObjectResult;
             result.Value.As<AuthResult>().IsAuth.Should().BeTrue();
         }
+        [Fact]
+        public void Test1()
+        {
+            var lab00Controller = new Lab00Controller();
+            var result = lab00Controller.Index2();
+            result.Value.As<AuthResult>().IsAuth.Should().BeTrue();
+        }
     }
 }
